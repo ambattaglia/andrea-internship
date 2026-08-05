@@ -14,7 +14,10 @@ const HotCollections = () => {
       .get("https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections")
       .then((res) => {
         setCollections(res.data);
-        setLoading(false);
+        // Delay the skeleton hiding by 1.5 seconds
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500);
       });
   }, []);
 
@@ -46,11 +49,15 @@ const HotCollections = () => {
             {new Array(4).fill(0).map((_, index) => (
               <div className="col-lg-3 col-md-6 col-sm-6" key={index}>
                 <div className="nft_coll">
-                  <div className="nft_wrap skeleton-box" style={{ height: "200px" }}></div>
-                  <div className="nft_coll_pp skeleton-box"></div>
-                  <div className="nft_coll_info">
-                    <div className="skeleton-box" style={{ width: "100px", height: "20px" }}></div>
-                    <div className="skeleton-box" style={{ width: "60px", height: "15px" }}></div>
+                  <div className="nft_wrap">
+                    <div className="skeleton-box" style={{ width: "100%", height: "200px" }}></div>
+                  </div>
+                  <div className="nft_coll_pp">
+                    <div className="skeleton-box" style={{ width: "65px", height: "65px", borderRadius: "50%" }}></div>
+                  </div>
+                  <div className="nft_coll_info" style={{ marginTop: "10px" }}>
+                    <div className="skeleton-box" style={{ width: "100px", height: "20px", margin: "0 auto 10px" }}></div>
+                    <div className="skeleton-box" style={{ width: "60px", height: "15px", margin: "0 auto" }}></div>
                   </div>
                 </div>
               </div>

@@ -15,7 +15,6 @@ const Explore = () => {
   const fetchItems = (filterType) => {
     setLoading(true);
 
-    // Fetch without query params if "all" is selected
     const url = filterType === "all"
       ? `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`
       : `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filterType}`;
@@ -24,7 +23,10 @@ const Explore = () => {
       .then((res) => res.json())
       .then((data) => {
         setItems(data);
-        setLoading(false);
+        // Delay the skeleton hiding by 1.5 seconds
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500);
       });
   };
 
@@ -60,7 +62,6 @@ const Explore = () => {
           <div className="container">
             <div className="row">
 
-              {/* ITEMS SECTION (Now includes the styled filter dropdown inside it) */}
               <ExploreItems 
                 items={items} 
                 loading={loading} 

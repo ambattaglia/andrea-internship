@@ -5,6 +5,35 @@ import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
+const CountdownTimer = ({ expiryDate }) => {
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    if (!expiryDate) return;
+
+    const calculateTimeLeft = () => {
+      const distance = expiryDate - Date.now();
+
+      if (distance < 0) {
+        setTimeLeft("Expired");
+      } else {
+        const hours = Math.floor(distance / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+      }
+    };
+
+    calculateTimeLeft();
+    const interval = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(interval);
+  }, [expiryDate]);
+
+  if (!expiryDate) return null;
+  return <div className="de_countdown">{timeLeft}</div>;
+};
+
 const NewItems = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +43,10 @@ const NewItems = () => {
       .get("https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems")
       .then((res) => {
         setItems(res.data);
-        setLoading(false);
+        // Delay the skeleton hiding by 1.5 seconds
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500);
       });
   }, []);
 
@@ -45,10 +77,18 @@ const NewItems = () => {
           <div className="row">
             {new Array(4).fill(0).map((_, index) => (
               <div className="col-lg-3 col-md-6 col-sm-6" key={index}>
-                <div
-                  className="nft__item skeleton-box"
-                  style={{ height: "300px", borderRadius: "10px" }}
-                ></div>
+                <div className="nft__item">
+                  <div className="author_list_pp">
+                    <div className="skeleton-box" style={{ width: "50px", height: "50px", borderRadius: "50%" }}></div>
+                  </div>
+                  <div className="nft__item_wrap">
+                    <div className="skeleton-box" style={{ width: "100%", height: "200px" }}></div>
+                  </div>
+                  <div className="nft__item_info" style={{ marginTop: "15px" }}>
+                    <div className="skeleton-box" style={{ width: "120px", height: "20px", marginBottom: "10px" }}></div>
+                    <div className="skeleton-box" style={{ width: "60px", height: "15px" }}></div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -57,8 +97,17 @@ const NewItems = () => {
             {items.map((item) => (
               <div className="item" key={item.id}>
                 <div className="nft__item">
+                  <div className="author_list_pp">
+                    <Link to={`/author/${item.authorId}`}>
+                      <img className="lazy" src={item.creatorImage} alt="" />
+                      <i className="fa fa-check"></i>
+                    </Link>
+                  </div>
+
+                  {item.expiryDate && <CountdownTimer expiryDate={item.expiryDate} />}
+
                   <div className="nft__item_wrap">
-                    <Link to={`/item-details/${item.id}`}>
+                    <Link to={`/item-details/${item.nftId}`}>
                       <img
                         src={item.nftImage}
                         className="lazy nft__item_preview"
@@ -68,7 +117,7 @@ const NewItems = () => {
                   </div>
 
                   <div className="nft__item_info">
-                    <Link to={`/item-details/${item.id}`}>
+                    <Link to={`/item-details/${item.nftId}`}>
                       <h4>{item.title}</h4>
                     </Link>
 

@@ -21,7 +21,7 @@ const CountdownTimer = ({ expiryDate }) => {
       }
     };
 
-    calculateTimeLeft(); // Run immediately
+    calculateTimeLeft();
     const interval = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(interval);
@@ -38,14 +38,12 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
     setVisibleItemsCount((prevCount) => prevCount + 4);
   };
 
-  // Reset pagination count back to 8 when new filtered items are loaded
   useEffect(() => {
     setVisibleItemsCount(8);
   }, [items]);
 
   return (
     <>
-      {/* Styled Filter Dropdown */}
       <div className="col-md-12">
         <div className="items_filter">
           <select id="filter-items" value={filter} onChange={onFilterChange}>
@@ -58,30 +56,36 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
       </div>
 
       {loading ? (
-        // Render Skeletons when Loading
+        // Detailed Shadow Skeleton loading
         new Array(8).fill(0).map((_, index) => (
           <div
             key={index}
             className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
             style={{ display: "block", backgroundSize: "cover" }}
           >
-            <div
-              className="nft__item skeleton-box"
-              style={{ height: "380px", borderRadius: "10px" }}
-            ></div>
+            <div className="nft__item">
+              <div className="author_list_pp">
+                <div className="skeleton-box" style={{ width: "50px", height: "50px", borderRadius: "50%" }}></div>
+              </div>
+              <div className="nft__item_wrap">
+                <div className="skeleton-box" style={{ width: "100%", height: "200px" }}></div>
+              </div>
+              <div className="nft__item_info" style={{ marginTop: "15px" }}>
+                <div className="skeleton-box" style={{ width: "120px", height: "20px", marginBottom: "10px" }}></div>
+                <div className="skeleton-box" style={{ width: "60px", height: "15px" }}></div>
+              </div>
+            </div>
           </div>
         ))
       ) : (
-        // Render Items from props
         items.slice(0, visibleItemsCount).map((item) => (
           <div
             key={item.id}
             className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
             style={{ display: "block", backgroundSize: "cover" }}
-            data-aos="zoom-in-up"
+            data-aos="flip-up" /* Changed zoom-in-up to flip-up */
           >
             <div className="nft__item">
-              {/* Author Avatar */}
               <div className="author_list_pp">
                 <Link
                   to={`/author/${item.authorId}`}
@@ -93,10 +97,8 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
                 </Link>
               </div>
 
-              {/* Countdown Timer */}
               {item.expiryDate && <CountdownTimer expiryDate={item.expiryDate} />}
 
-              {/* NFT Image */}
               <div className="nft__item_wrap">
                 <div className="nft__item_extra">
                   <div className="nft__item_buttons">
@@ -127,7 +129,6 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
                 </Link>
               </div>
 
-              {/* Details Info */}
               <div className="nft__item_info">
                 <Link to={`/item-details/${item.nftId}`}>
                   <h4>{item.title}</h4>
@@ -143,7 +144,6 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
         ))
       )}
 
-      {/* Load More Button */}
       {!loading && visibleItemsCount < items.length && (
         <div className="col-md-12 text-center">
           <button onClick={loadMore} id="loadmore" className="btn-main g-color">
