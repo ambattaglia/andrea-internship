@@ -35,7 +35,8 @@ const NewItems = () => {
     <section id="section-new-items" className="no-bottom">
       <div className="container">
         <div className="row">
-          <div className="col-lg-12 text-center">
+          {/* Added fade-in animation to the header wrapper */}
+          <div className="col-lg-12 text-center" data-aos="fade-in">
             <h2>New Items</h2>
             <div className="small-border bg-color-2"></div>
           </div>
@@ -53,7 +54,8 @@ const NewItems = () => {
             ))}
           </div>
         ) : (
-          <OwlCarousel className="owl-theme" {...options}>
+          /* Added fade-right animation directly to OwlCarousel */
+          <OwlCarousel className="owl-theme" {...options} data-aos="fade-right">
             {items.map((item) => (
               <div className="item" key={item.id}>
                 <div className="nft__item">

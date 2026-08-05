@@ -35,7 +35,7 @@ const HotCollections = () => {
     <section id="section-collections" className="no-bottom">
       <div className="container">
         <div className="row">
-          <div className="col-lg-12 text-center">
+          <div className="col-lg-12 text-center" data-aos="fade-in">
             <h2>Hot Collections</h2>
             <div className="small-border bg-color-2"></div>
           </div>
@@ -57,7 +57,8 @@ const HotCollections = () => {
             ))}
           </div>
         ) : (
-          <OwlCarousel className="owl-theme" {...options}>
+          /* Uses fade-left to slide the carousel in from the right */
+          <OwlCarousel className="owl-theme" {...options} data-aos="fade-left">
             {collections.map((item) => (
               <div className="item" key={item.id}>
                 <div className="nft_coll">

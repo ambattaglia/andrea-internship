@@ -78,6 +78,7 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
             key={item.id}
             className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
             style={{ display: "block", backgroundSize: "cover" }}
+            data-aos="zoom-in-up" /* Added zoom-in-up animation directly to wrapper div */
           >
             <div className="nft__item">
               {/* Author Avatar */}
