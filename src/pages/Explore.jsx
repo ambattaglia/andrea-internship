@@ -15,7 +15,7 @@ const Explore = () => {
   const fetchItems = (filterType) => {
     setLoading(true);
 
-    // Fetch without query params if "all" is selected
+    
     const url = filterType === "all"
       ? `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`
       : `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filterType}`;

@@ -21,11 +21,9 @@ const TopSellers = () => {
         <div className="row">
 
           {/* Title */}
-          <div className="col-lg-12">
-            <div className="text-center">
-              <h2>Top Sellers</h2>
-              <div className="small-border bg-color-2"></div>
-            </div>
+          <div className="col-lg-12 text-center" data-aos="fade-in">
+            <h2>Top Sellers</h2>
+            <div className="small-border bg-color-2"></div>
           </div>
 
           {/* List */}
@@ -53,8 +51,12 @@ const TopSellers = () => {
 
               {/* API DATA */}
               {!loading &&
-                sellers.map((seller) => (
-                  <li key={seller.id}>
+                sellers.map((seller, index) => (
+                  <li
+                    key={seller.id}
+                    data-aos="flip-left" /* Set AOS to flip-left */
+                    data-aos-delay={index * 50} /* Staggered entry delay */
+                  >
                     <div className="author_list_pp">
                       <Link to={`/author/${seller.authorId}`}>
                         <img
