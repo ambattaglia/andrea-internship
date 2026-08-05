@@ -1,11 +1,40 @@
-import React, { useEffect } from "react";
-import SubHeader from "../images/subheader.jpg";
+import React, { useEffect, useState } from "react";
 import ExploreItems from "../components/explore/ExploreItems";
+import SubHeader from "../images/subheader.jpg";
 
 const Explore = () => {
+  const [items, setItems] = useState([]);
+  const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchItems("all");
   }, []);
+
+  const fetchItems = (filterType) => {
+    setLoading(true);
+
+    const url = filterType === "all"
+      ? `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore`
+      : `https://us-central1-nft-cloud-functions.cloudfunctions.net/explore?filter=${filterType}`;
+
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        setItems(data);
+        // Delay the skeleton hiding by 1.5 seconds
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500);
+      });
+  };
+
+  const handleFilterChange = (e) => {
+    const selected = e.target.value;
+    setFilter(selected);
+    fetchItems(selected);
+  };
 
   return (
     <div id="wrapper">
@@ -32,7 +61,14 @@ const Explore = () => {
         <section aria-label="section">
           <div className="container">
             <div className="row">
-              <ExploreItems />
+
+              <ExploreItems 
+                items={items} 
+                loading={loading} 
+                filter={filter} 
+                onFilterChange={handleFilterChange} 
+              />
+
             </div>
           </div>
         </section>
