@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+// Helper component for the countdown timer on the cards
 const CountdownTimer = ({ expiryDate }) => {
   const [timeLeft, setTimeLeft] = useState("");
 
@@ -20,7 +21,7 @@ const CountdownTimer = ({ expiryDate }) => {
       }
     };
 
-    calculateTimeLeft();
+    calculateTimeLeft(); // Run immediately
     const interval = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(interval);
@@ -37,12 +38,14 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
     setVisibleItemsCount((prevCount) => prevCount + 4);
   };
 
+  // Reset pagination count back to 8 when new filtered items are loaded
   useEffect(() => {
     setVisibleItemsCount(8);
   }, [items]);
 
   return (
     <>
+      {/* Styled Filter Dropdown */}
       <div className="col-md-12">
         <div className="items_filter">
           <select id="filter-items" value={filter} onChange={onFilterChange}>
@@ -55,6 +58,7 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
       </div>
 
       {loading ? (
+        // Render Skeletons when Loading
         new Array(8).fill(0).map((_, index) => (
           <div
             key={index}
@@ -68,6 +72,7 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
           </div>
         ))
       ) : (
+        // Render Items from props
         items.slice(0, visibleItemsCount).map((item) => (
           <div
             key={item.id}
@@ -76,6 +81,7 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
             data-aos="zoom-in-up"
           >
             <div className="nft__item">
+              {/* Author Avatar */}
               <div className="author_list_pp">
                 <Link
                   to={`/author/${item.authorId}`}
@@ -87,21 +93,26 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
                 </Link>
               </div>
 
+              {/* Countdown Timer */}
               {item.expiryDate && <CountdownTimer expiryDate={item.expiryDate} />}
 
+              {/* NFT Image */}
               <div className="nft__item_wrap">
                 <div className="nft__item_extra">
                   <div className="nft__item_buttons">
                     <button>Buy Now</button>
                     <div className="nft__item_share">
                       <h4>Share</h4>
-                      <a href="" target="_blank" rel="noreferrer">
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <a href="#" target="_blank" rel="noreferrer">
                         <i className="fa fa-facebook fa-lg"></i>
                       </a>
-                      <a href="" target="_blank" rel="noreferrer">
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <a href="#" target="_blank" rel="noreferrer">
                         <i className="fa fa-twitter fa-lg"></i>
                       </a>
-                      <a href="">
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <a href="#">
                         <i className="fa fa-envelope fa-lg"></i>
                       </a>
                     </div>
@@ -116,6 +127,7 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
                 </Link>
               </div>
 
+              {/* Details Info */}
               <div className="nft__item_info">
                 <Link to={`/item-details/${item.nftId}`}>
                   <h4>{item.title}</h4>
@@ -131,6 +143,7 @@ const ExploreItems = ({ items, loading, filter, onFilterChange }) => {
         ))
       )}
 
+      {/* Load More Button */}
       {!loading && visibleItemsCount < items.length && (
         <div className="col-md-12 text-center">
           <button onClick={loadMore} id="loadmore" className="btn-main g-color">
